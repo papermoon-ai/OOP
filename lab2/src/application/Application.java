@@ -23,10 +23,7 @@ public class Application {
         shapes.add(new Triangle(3, 4, 5));
         shapes.add(new Triangle(2, 2, 3));
 
-        double S = 0;
-        for (Shape shape : shapes) {
-            S += shape.calcArea();
-        }
+        double S = shapes.stream().mapToDouble(Shape::calcArea).sum();
 
         out.println("Total square: " + S);
 
@@ -34,16 +31,12 @@ public class Application {
 
         Collections.sort(shapes, Comparator.comparingDouble(Shape::calcArea).reversed());
 
-        for (Shape shape : shapes) {
-            out.println(shape.getInfo());
-        }
+        shapes.forEach(shape -> out.println(shape.getInfo()));
 
         out.println("Shapes sorted by perimeter: ");
 
         Collections.sort(shapes, Comparator.comparingDouble(Shape::calcPerimeter).reversed());
 
-        for (Shape shape : shapes) {
-            out.println(shape.getInfo());
-        }
+        shapes.forEach(shape -> out.println(shape.getInfo()));
     }
 }
