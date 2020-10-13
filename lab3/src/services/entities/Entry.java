@@ -12,7 +12,7 @@ public class Entry {
 
     private static final String CONTACT_IS_ALREADY_ADDED_MESSAGE = "This contact is already added";
 
-    private static final String CONTACT_DOES_NOT_EXIST_MESSAGE = "This contact is already added";
+    private static final String CONTACT_DOES_NOT_EXIST_MESSAGE = "This contact doesn't exist";
 
     public Entry(String name, String surname, Contact contact) {
         this.name = name;
