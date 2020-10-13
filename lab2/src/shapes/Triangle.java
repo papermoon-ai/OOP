@@ -9,6 +9,9 @@ public class Triangle implements Shape {
     private static final String INCORRECT_SIDES_MESSAGE = "Triangle with these sides doesn't exist";
 
     public Triangle(double a, double b, double c) {
+        if (a <= 0 || b <= 0 || c <= 0)
+            throw new IllegalArgumentException(INCORRECT_SIDES_MESSAGE);
+
         if (a + b <= c || a + c <= b || b + c <= a)
             throw new IllegalArgumentException(INCORRECT_SIDES_MESSAGE);
 

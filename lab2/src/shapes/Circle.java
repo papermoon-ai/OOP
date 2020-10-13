@@ -4,7 +4,12 @@ public class Circle implements Shape {
 
     public final double radius;
 
+    public static final String INCORRECT_RADIUS_MESSAGE = "Circle with this radius doesn't exist";
+
     public Circle(double radius) {
+        if (radius <= 0)
+            throw new IllegalArgumentException(INCORRECT_RADIUS_MESSAGE);
+
         this.radius = radius;
     }
 

@@ -5,7 +5,12 @@ public class Rectangle implements Shape {
     public final double a;
     public final double b;
 
+    public static final String INCORRECT_SIDES_MESSAGE = "Rectangle with these sides doesn't exist";
+
     public Rectangle(double a, double b) {
+        if (a <= 0 || b <= 0)
+            throw new IllegalArgumentException(INCORRECT_SIDES_MESSAGE);
+
         this.a = a;
         this.b = b;
     }

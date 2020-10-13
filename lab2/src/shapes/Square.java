@@ -4,7 +4,11 @@ public class Square implements Shape {
 
     public final double a;
 
+    public static final String INCORRECT_SIDES_MESSAGE = "Square with these sides doesn't exist";
+
     public Square(double a) {
+        if (a <= 0)
+            throw new IllegalArgumentException(INCORRECT_SIDES_MESSAGE);
         this.a = a;
     }
 
