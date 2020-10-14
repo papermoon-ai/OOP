@@ -34,7 +34,7 @@ public class Rectangle implements Shape {
     }
 
     @Override
-    public String getInfo() {
+    public String toString() {
         return "Rectangle (a = " + a + ", b = " + b + "):\n" +
                 "Area = " + calcArea() + "\n" +
                 "Perimeter = " + calcPerimeter() + "\n";

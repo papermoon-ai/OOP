@@ -44,7 +44,7 @@ public class Triangle implements Shape {
     }
 
     @Override
-    public String getInfo() {
+    public String toString() {
         return "Triangle (a = " + a + ", b = " + b + ", c = " + c + "):\n" +
                 "Area = " + calcArea() + "\n" +
                 "Perimeter = " + calcPerimeter() + "\n";

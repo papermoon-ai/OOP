@@ -24,19 +24,14 @@ public class Application {
         shapes.add(new Triangle(2, 2, 3));
 
         double S = shapes.stream().mapToDouble(Shape::calcArea).sum();
-
         out.println("Total square: " + S);
 
         out.println("Shapes sorted by area: ");
-
-        Collections.sort(shapes, Comparator.comparingDouble(Shape::calcArea).reversed());
-
-        shapes.forEach(shape -> out.println(shape.getInfo()));
+        shapes.sort(Comparator.comparingDouble(Shape::calcArea).reversed());
+        shapes.forEach(shape -> out.println(shape.toString()));
 
         out.println("Shapes sorted by perimeter: ");
-
-        Collections.sort(shapes, Comparator.comparingDouble(Shape::calcPerimeter).reversed());
-
-        shapes.forEach(shape -> out.println(shape.getInfo()));
+        shapes.sort(Comparator.comparingDouble(Shape::calcPerimeter).reversed());
+        shapes.forEach(shape -> out.println(shape.toString()));
     }
 }
