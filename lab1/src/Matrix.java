@@ -168,13 +168,18 @@ public class Matrix {
         return true;
     }
 
-    public void print() {
+    @Override
+    public String toString() {
+        StringBuilder str = new StringBuilder();
+        
         for(int i = 0; i < rows; i++) {
             for(int j = 0; j < columns; j++) {
-                System.out.print(matrix[i][j] + " ");
+               str.append(matrix[i][j] + " ");
             }
-            System.out.print("\n");
+            str.append("\n");
         }
-        System.out.println();
+        
+        str.append("\n");
+        return str.toString();
     }
 }
