@@ -22,26 +22,26 @@ public class Application {
         Matrix C = A.multiply(B);
 
         out.println("Matrix A:");
-        A.print();
+        out.println(A.toString());
 
         out.println("Matrix B:");
-        B.print();
+        out.println(B.toString());
 
         out.println("Matrix C = A * B:");
-        C.print();
+        out.println(C.toString());
         out.println("C(0, 2) = " + C.get(0, 2));
         out.println("Matrix C dimension: " + C.dimension());
         out.println("det(C) = " + C.det() + "\n");
 
         Matrix D = A.multiply(3);
         out.println("Matrix D = 3 * A:");
-        D.print();
+        out.println(D.toString());
         out.println("D = A - D:");
         D = A.minus(D);
-        D.print();
+        out.println(D.toString());
         out.println("D = A + D:");
         D = A.plus(D);
-        D.print();
+        out.println(D.toString());
 
         out.println("A == D?\n" + A.equals(D));
         D = D.multiply(-1);
