@@ -6,18 +6,13 @@ import services.contacts.ContactType;
 import java.util.*;
 
 public class Entry {
-    private final String name;
-    private final String surname;
     private final Map<ContactType, List<String>> contacts;
 
     private static final String CONTACT_IS_ALREADY_ADDED_MESSAGE = "This contact is already added";
 
     private static final String CONTACT_DOES_NOT_EXIST_MESSAGE = "This contact doesn't exist";
 
-    public Entry(String name, String surname, Contact contact) {
-        this.name = name;
-        this.surname = surname;
-
+    public Entry(Contact contact) {
         List<String> info = new ArrayList<>();
         info.add(contact.getInfo());
 
@@ -58,7 +53,7 @@ public class Entry {
     }
 
     public String getInfo() {
-        StringBuilder data = new StringBuilder(name + " " + surname + ":\n");
+        StringBuilder data = new StringBuilder();
 
         for (ContactType type : contacts.keySet()) {
             data.append(type.toString()).append(": ");
@@ -72,7 +67,6 @@ public class Entry {
 
     public String toString() {
         StringBuilder data = new StringBuilder();
-        data.append(name).append(surname);
 
         contacts.values().forEach(data::append);
         return data.toString();

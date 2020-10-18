@@ -2,8 +2,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class Matrix {
     private final int[][] matrix;
-    private final int rows;
-    private final int columns;
+    public final int rows;
+    public final int columns;
 
     private static final String INCORRECT_DIMENSION_MESSAGE = "Matrix dimension has to be greater than 0";
 
@@ -40,8 +40,12 @@ public class Matrix {
         return matrix[row][column];
     }
 
-    public String dimension() {
-        return rows + "x" + columns;
+    public int getRows() {
+        return rows;
+    }
+
+    public int getColumns() {
+        return columns;
     }
 
     public Matrix plus(@NotNull Matrix B) {

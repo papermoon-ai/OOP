@@ -30,7 +30,7 @@ public class Application {
         out.println("Matrix C = A * B:");
         out.println(C.toString());
         out.println("C(0, 2) = " + C.get(0, 2));
-        out.println("Matrix C dimension: " + C.dimension());
+        out.println("Matrix C dimension: " + C.getRows() + "x" + C.getColumns());
         out.println("det(C) = " + C.det() + "\n");
 
         Matrix D = A.multiply(3);
