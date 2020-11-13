@@ -1,0 +1,1 @@
+[{"CLASSNAME":"data.shapes.Circle","DATA":{"radius":3.0}},{"CLASSNAME":"data.shapes.Square","DATA":{"a":5.0}},{"CLASSNAME":"data.shapes.Rectangle","DATA":{"a":2.0,"b":3.0}},{"CLASSNAME":"data.shapes.Triangle","DATA":{"a":3.0,"b":4.0,"c":5.0}}]
