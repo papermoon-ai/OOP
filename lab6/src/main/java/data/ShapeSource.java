@@ -3,6 +3,8 @@ package data;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import data.exceptions.ConsoleErrorHandler;
+import data.exceptions.IOErrorHandler;
 import data.shapes.Shape;
 
 import java.io.*;

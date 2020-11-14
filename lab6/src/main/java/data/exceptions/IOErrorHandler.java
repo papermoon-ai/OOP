@@ -1,4 +1,4 @@
-package data;
+package data.exceptions;
 
 import java.io.IOException;
 

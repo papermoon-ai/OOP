@@ -31,7 +31,6 @@ public class InterfaceAdapter implements JsonSerializer<Shape>, JsonDeserializer
         try {
             return Class.forName(className);
         } catch (ClassNotFoundException e) {
-            //e.printStackTrace();
             throw new JsonParseException(e.getMessage());
         }
     }
