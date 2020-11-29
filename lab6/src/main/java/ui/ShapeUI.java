@@ -6,9 +6,12 @@ import data.shapes.Shape;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.ListDataEvent;
+import javax.swing.event.ListDataListener;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -36,8 +39,31 @@ public class ShapeUI extends JDialog {
 
         source = new ShapeSource("shapes.json");
         DefaultListModel<Shape> dlm = new DefaultListModel<>();
-        dlm.addAll(source.fromFile());
+
+        try {
+            dlm.addAll(source.fromFile());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         shapes.setListData(dlm.toArray());
+
+        dlm.addListDataListener(new ListDataListener() {
+            @Override
+            public void intervalAdded(ListDataEvent e) {
+                shapes.setListData(dlm.toArray());
+            }
+
+            @Override
+            public void intervalRemoved(ListDataEvent e) {
+                shapes.setListData(dlm.toArray());
+            }
+
+            @Override
+            public void contentsChanged(ListDataEvent e) {
+                shapes.setListData(dlm.toArray());
+            }
+        });
 
         moveDownButton.addActionListener(e -> {
             int index = shapes.getSelectedIndex();
@@ -47,7 +73,6 @@ public class ShapeUI extends JDialog {
 
             Shape temp = dlm.set(index + 1, dlm.get(index));
             dlm.set(index, temp);
-            shapes.setListData(dlm.toArray());
         });
 
         moveUpButton.addActionListener(e -> {
@@ -58,33 +83,28 @@ public class ShapeUI extends JDialog {
 
             Shape temp = dlm.set(index - 1, dlm.get(index));
             dlm.set(index, temp);
-            shapes.setListData(dlm.toArray());
         });
 
         removeButton.addActionListener(e -> {
             dlm.remove(shapes.getSelectedIndex());
-            shapes.setListData(dlm.toArray());
         });
 
         createCircleButton.addActionListener(e -> {
             CreateCircleFrame auxiliaryFrame = new CreateCircleFrame(dlm::addElement,
                     getX() + getWidth() / 5, getY() + getHeight() / 4);
             auxiliaryFrame.setVisible(true);
-            shapes.setListData(dlm.toArray());
         });
 
         createSquareButton.addActionListener(e -> {
             CreateSquareFrame auxiliaryFrame = new CreateSquareFrame(dlm::addElement,
                     getX() + getWidth() / 5, getY() + getHeight() / 4);
             auxiliaryFrame.setVisible(true);
-            shapes.setListData(dlm.toArray());
         });
 
         createRectangleButton.addActionListener(e -> {
             CreateRectangleFrame auxiliaryFrame = new CreateRectangleFrame(dlm::addElement,
                     getX() + getWidth() / 5, getY() + getHeight() / 4);
             auxiliaryFrame.setVisible(true);
-            shapes.setListData(dlm.toArray());
         });
 
         createTriangleButton.addActionListener(e -> {
@@ -92,7 +112,6 @@ public class ShapeUI extends JDialog {
                     getX() + getWidth() / 5, getY() + getHeight() / 4);
 
             auxiliaryFrame.setVisible(true);
-            shapes.setListData(dlm.toArray());
         });
 
         addWindowListener(new WindowAdapter() {
@@ -100,7 +119,13 @@ public class ShapeUI extends JDialog {
             public void windowClosing(WindowEvent e) {
                 List<Shape> updatedShapes = new ArrayList<>();
                 Arrays.stream(dlm.toArray()).forEach(element -> updatedShapes.add((Shape) element));
-                source.toFile(updatedShapes);
+
+                try {
+                    source.toFile(updatedShapes);
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+
                 e.getWindow().dispose();
             }
         });

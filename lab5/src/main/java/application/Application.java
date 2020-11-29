@@ -4,11 +4,12 @@ import data.FileSource;
 import data.ShapeSource;
 import data.shapes.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Application {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         List<Shape> shapes = new ArrayList<>();
 
         shapes.add(new Circle(3));
