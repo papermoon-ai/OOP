@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Application {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         List<Shape> shapes = new ArrayList<>();
 
         shapes.add(new Circle(3));
@@ -18,9 +18,17 @@ public class Application {
         shapes.add(new Triangle(3, 4, 5));
 
         FileSource<Shape> converter = new ShapeSource("shapes.json");
-        converter.toFile(shapes);
+        try {
+            converter.toFile(shapes);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-        List<Shape> shapesFromFile = converter.fromFile();
-        shapesFromFile.forEach(System.out::println);
+        try {
+            List<Shape> shapesFromFile = converter.fromFile();
+            shapesFromFile.forEach(System.out::println);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -18,30 +18,32 @@ public class ShapeSource implements FileSource<Shape> {
     }
 
     public void toFile(List<Shape> shapes) throws IOException {
-        Writer writer = new FileWriter(path, false);
+        try (Writer writer = new FileWriter(path, false)) {
+            GsonBuilder builder = new GsonBuilder();
+            Type type = new TypeToken<List<Shape>>() {
+            }.getType();
 
-        GsonBuilder builder = new GsonBuilder();
-        Type type = new TypeToken<List<Shape>>() {}.getType();
-
-        builder.registerTypeAdapter(Shape.class, new InterfaceAdapter());
-        Gson gson = builder.create();
-
-        gson.toJson(shapes, type, writer);
-        writer.close();
+            builder.registerTypeAdapter(Shape.class, new InterfaceAdapter());
+            Gson gson = builder.create();
+            gson.toJson(shapes, type, writer);
+        } catch (IOException e) {
+            throw new IOException("An error has occurred while working with the file. Check file path.");
+        }
     }
 
     public List<Shape> fromFile() throws IOException {
-        FileReader reader = new FileReader(path);
+        try (FileReader reader = new FileReader(path)) {
+            GsonBuilder builder = new GsonBuilder();
+            Type type = new TypeToken<List<Shape>>() {
+            }.getType();
 
-        GsonBuilder builder = new GsonBuilder();
-        Type type = new TypeToken<List<Shape>>() {}.getType();
+            builder.registerTypeAdapter(Shape.class, new InterfaceAdapter());
+            Gson gson = builder.create();
 
-        builder.registerTypeAdapter(Shape.class, new InterfaceAdapter());
-        Gson gson = builder.create();
-
-        List<Shape> shapes = gson.fromJson(reader, type);
-
-        reader.close();
-        return shapes != null ? shapes : Collections.emptyList();
+            List<Shape> shapes = gson.fromJson(reader, type);
+            return shapes != null ? shapes : Collections.emptyList();
+        } catch (IOException e) {
+            throw new IOException("An error has occurred while working with the file. Check file path.");
+        }
     }
 }
