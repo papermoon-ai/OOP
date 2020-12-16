@@ -5,6 +5,7 @@ import data.Entry;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -20,6 +21,7 @@ public class EditImage extends JDialog {
     private JTextField headline;
     private JLabel imageLabel;
     private JLabel date;
+    private JLabel errorLabel;
 
     public EditImage(OnAddedEntryListener listener) {
         $$$setupUI$$$();
@@ -27,41 +29,36 @@ public class EditImage extends JDialog {
         setModal(true);
         setTitle("Добавить изображение");
 
-        loadButton.addActionListener(e -> {
-            JFileChooser fileChooser = new JFileChooser(new File("/images"));
-            fileChooser.setDialogTitle("Выбор изображения");
-            fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-
-            int result = fileChooser.showOpenDialog(this);
-            if (result == JFileChooser.APPROVE_OPTION) {
-                try {
-                    Image image = ImageIO.read(fileChooser.getSelectedFile());
-                    image = image.getScaledInstance(400, -1, Image.SCALE_SMOOTH);
-                    imageLabel.setIcon(new ImageIcon(image));
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-            }
-        });
+        loadButton.addActionListener(this::loadListener);
 
         saveButton.addActionListener(e -> {
+            errorLabel.setText("");
+
+            if (imageLabel.getWidth() <= 0 || imageLabel.getHeight() <= 0) {
+                errorLabel.setText("Изображение не было загружено");
+                return;
+            }
+
             BufferedImage image = new BufferedImage(imageLabel.getWidth(), imageLabel.getHeight(),
                     BufferedImage.TYPE_INT_RGB);
 
             imageLabel.paint(image.getGraphics());
 
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
+
             try {
                 ImageIO.write(image, "jpg", bos);
             } catch (IOException ex) {
-                ex.printStackTrace();
+                errorLabel.setText("Ошибка при работе с файлом");
             }
+
             byte[] data = bos.toByteArray();
             Entry<byte[]> entry = new Entry<>(byte[].class);
 
             entry.setHeadline(headline.getText());
             entry.setContent(data);
-            listener.addElement(entry);
+            listener.onAdded(entry);
+
             dispose();
         });
 
@@ -84,34 +81,27 @@ public class EditImage extends JDialog {
 
         imageLabel.setIcon(new ImageIcon(entry.getContent()));
 
-        loadButton.addActionListener(e -> {
-            JFileChooser fileChooser = new JFileChooser(new File("/images"));
-            fileChooser.setDialogTitle("Выбор изображения");
-            fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-
-            int result = fileChooser.showOpenDialog(this);
-            if (result == JFileChooser.APPROVE_OPTION) {
-                try {
-                    Image image = ImageIO.read(fileChooser.getSelectedFile());
-                    image = image.getScaledInstance(400, -1, Image.SCALE_SMOOTH);
-                    imageLabel.setIcon(new ImageIcon(image));
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-            }
-        });
+        loadButton.addActionListener(this::loadListener);
 
         saveButton.addActionListener(e -> {
+            errorLabel.setText("");
+
+            if (imageLabel.getWidth() <= 0 || imageLabel.getHeight() <= 0) {
+                errorLabel.setText("Изображение не было загружено");
+                return;
+            }
+
             BufferedImage image = new BufferedImage(imageLabel.getWidth(), imageLabel.getHeight(),
                     BufferedImage.TYPE_INT_RGB);
 
             imageLabel.paint(image.getGraphics());
 
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
+
             try {
                 ImageIO.write(image, "jpg", bos);
             } catch (IOException ex) {
-                ex.printStackTrace();
+                errorLabel.setText("Ошибка при работе с файлом");
             }
             byte[] data = bos.toByteArray();
 
@@ -120,6 +110,7 @@ public class EditImage extends JDialog {
             entry.setDateOfChange(LocalDateTime.now());
             dispose();
         });
+
         setSize(650, 500);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setVisible(true);
@@ -146,7 +137,7 @@ public class EditImage extends JDialog {
         panel2.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
         contentPane.add(panel2, new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         final JPanel panel3 = new JPanel();
-        panel3.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(4, 1, new Insets(0, 0, 0, 0), -1, -1));
+        panel3.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(5, 1, new Insets(0, 0, 0, 0), -1, -1));
         panel3.setBackground(new Color(-1));
         panel2.add(panel3, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         loadButton = new JButton();
@@ -154,20 +145,26 @@ public class EditImage extends JDialog {
         Font loadButtonFont = this.$$$getFont$$$(null, Font.PLAIN, 14, loadButton.getFont());
         if (loadButtonFont != null) loadButton.setFont(loadButtonFont);
         loadButton.setText("Загрузить изображение");
-        panel3.add(loadButton, new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel3.add(loadButton, new com.intellij.uiDesigner.core.GridConstraints(2, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final com.intellij.uiDesigner.core.Spacer spacer1 = new com.intellij.uiDesigner.core.Spacer();
-        panel3.add(spacer1, new com.intellij.uiDesigner.core.GridConstraints(3, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_VERTICAL, 1, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        panel3.add(spacer1, new com.intellij.uiDesigner.core.GridConstraints(4, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_VERTICAL, 1, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         saveButton = new JButton();
         saveButton.setBackground(new Color(-9652549));
         Font saveButtonFont = this.$$$getFont$$$(null, Font.PLAIN, 14, saveButton.getFont());
         if (saveButtonFont != null) saveButton.setFont(saveButtonFont);
         saveButton.setText("Сохранить");
-        panel3.add(saveButton, new com.intellij.uiDesigner.core.GridConstraints(2, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel3.add(saveButton, new com.intellij.uiDesigner.core.GridConstraints(3, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         date = new JLabel();
         Font dateFont = this.$$$getFont$$$(null, Font.PLAIN, 12, date.getFont());
         if (dateFont != null) date.setFont(dateFont);
         date.setText("");
         panel3.add(date, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        errorLabel = new JLabel();
+        Font errorLabelFont = this.$$$getFont$$$(null, Font.PLAIN, 12, errorLabel.getFont());
+        if (errorLabelFont != null) errorLabel.setFont(errorLabelFont);
+        errorLabel.setForeground(new Color(-64224));
+        errorLabel.setText("");
+        panel3.add(errorLabel, new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JPanel panel4 = new JPanel();
         panel4.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
         panel4.setBackground(new Color(-1));
@@ -214,4 +211,22 @@ public class EditImage extends JDialog {
         return contentPane;
     }
 
+    private void loadListener(ActionEvent e) {
+        errorLabel.setText("");
+
+        JFileChooser fileChooser = new JFileChooser(new File(""));
+        fileChooser.setDialogTitle("Выбор изображения");
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+
+        int result = fileChooser.showOpenDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            try {
+                Image image = ImageIO.read(fileChooser.getSelectedFile());
+                image = image.getScaledInstance(400, -1, Image.SCALE_SMOOTH);
+                imageLabel.setIcon(new ImageIcon(image));
+            } catch (IOException ex) {
+                errorLabel.setText("Ошибка при работе с файлом");
+            }
+        }
+    }
 }

@@ -45,4 +45,21 @@ public class Entry<T> {
     public Class<T> getType() {
         return type;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null)
+            return false;
+        if (this.getClass() != o.getClass())
+            return false;
+
+        Entry that = (Entry) o;
+        if (!this.getHeadline().equals(that.headline))
+            return false;
+        if (!this.getDateOfChange().isEqual(that.dateOfChange))
+            return false;
+        return this.getContent().equals(that.getContent());
+    }
 }
