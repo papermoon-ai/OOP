@@ -1,5 +1,9 @@
 package ui;
 
+import ui.additionalClasses.GhostTextArea;
+import ui.listeners.OnAddedTaskListener;
+import ui.listeners.OnEditTaskListener;
+
 import javax.swing.*;
 import java.awt.*;
 

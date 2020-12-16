@@ -1,6 +1,8 @@
 package ui;
 
 import data.Entry;
+import ui.additionalClasses.GhostTextField;
+import ui.listeners.OnAddedEntryListener;
 
 import javax.swing.*;
 import javax.swing.event.ListDataEvent;

@@ -1,8 +1,9 @@
 package ui;
 
 import data.Entry;
-import data.EntrySource;
-import data.FileSource;
+import data.sources.EntrySource;
+import data.sources.FileSource;
+import ui.additionalClasses.GhostTextField;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;

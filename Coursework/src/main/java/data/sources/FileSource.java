@@ -1,4 +1,6 @@
-package data;
+package data.sources;
+
+import data.Entry;
 
 import java.io.IOException;
 import java.util.List;

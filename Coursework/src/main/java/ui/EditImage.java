@@ -1,6 +1,8 @@
 package ui;
 
 import data.Entry;
+import ui.additionalClasses.GhostTextField;
+import ui.listeners.OnAddedEntryListener;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;

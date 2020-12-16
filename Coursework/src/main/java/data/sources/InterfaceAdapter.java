@@ -1,6 +1,7 @@
-package data;
+package data.sources;
 
 import com.google.gson.*;
+import data.Entry;
 
 import java.lang.reflect.Type;
 import java.time.LocalDateTime;

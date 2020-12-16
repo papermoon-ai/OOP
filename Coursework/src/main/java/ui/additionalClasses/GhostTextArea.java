@@ -1,4 +1,4 @@
-package ui;
+package ui.additionalClasses;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -9,14 +9,14 @@ import java.awt.event.FocusListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-public class GhostTextField implements FocusListener, DocumentListener, PropertyChangeListener {
-    private final JTextField textField;
+public class GhostTextArea implements FocusListener, DocumentListener, PropertyChangeListener {
+    private final JTextArea textField;
     private boolean isEmpty;
     private Color ghostColor;
     private Color foregroundColor;
     private final String ghostText;
 
-    protected GhostTextField(final JTextField textField, String ghostText) {
+    public GhostTextArea(final JTextArea textField, String ghostText) {
         super();
         this.textField = textField;
         this.ghostText = ghostText;

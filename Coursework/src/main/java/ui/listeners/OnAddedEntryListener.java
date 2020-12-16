@@ -1,4 +1,4 @@
-package ui;
+package ui.listeners;
 
 import data.Entry;
 

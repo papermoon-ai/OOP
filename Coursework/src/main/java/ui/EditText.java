@@ -1,6 +1,9 @@
 package ui;
 
 import data.Entry;
+import ui.additionalClasses.GhostTextArea;
+import ui.additionalClasses.GhostTextField;
+import ui.listeners.OnAddedEntryListener;
 
 import javax.swing.*;
 import java.awt.*;
