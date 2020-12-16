@@ -62,4 +62,14 @@ public class Entry<T> {
             return false;
         return this.getContent().equals(that.getContent());
     }
+
+    @Override
+    public int hashCode() {
+        final int prime = 17;
+        int result = 1;
+        result = prime * result + headline.hashCode();
+        result = prime * result + dateOfChange.hashCode();
+        result = prime * result + content.hashCode();
+        return result;
+    }
 }
